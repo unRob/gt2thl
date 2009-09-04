@@ -1,0 +1,83 @@
+#!/usr/local/php5/bin/php
+<?php
+/*	
+	---tasks
+	[Z_ENT] => 7
+	[Z_PK] => 243 /id
+	[Z_OPT] => 2
+	[ZPRIORITY] => 0
+	[ZRECURRING] => 0
+	[ZUIDNUM] => 4834550523432160374
+	[ZPARENTLIST] => 50 /lista de folder
+	[ZPARENTTASK] => 
+	[ZSTARTDATE] => 273387600
+	[ZDISPLAYORDER] => 1250
+	[ZDUEDATE] => 273474000
+	[ZARCHIVEDDATE] => 
+	[ZCREATEDDATE] => 273455153.48869
+	[ZESTIMATEDTIME] => 0
+	[ZMODIFIEDDATE] => 273455230.82349
+	[ZACTUALTIME] => 0
+	[ZCANCELEDDATE] => 
+	[ZCOMPLETEDDATE] => 
+	[ZCALENDARSTOREUID] => 415253F5-0F69-42F2-A165-2C0B45D87F9A
+	[ZNOTES] => 
+	[ZTITLE] => Pedir docking stations y accesorios /comtelsat /dell
+	[ZATTRIBUTEDNOTES] => 
+	[ZRECURRENCERULE] =>
+	
+	
+	---
+	
+*/
+
+
+$db = new SQlite3('/Users/rob/Documents/gtd.thllibrary/library.sqlite3');
+
+//$poo = $db->query('SELECT * FROM ZTASK ORDER BY ZCREATEDDATE DESC LIMIT 10');
+
+$dueToday = 
+	'SELECT ZTITLE, ZNOTES
+	FROM ZTASK
+	WHERE date(ZDUEDATE,"UNIXEPOCH","+31 YEARS")= date("now","localtime")
+	AND ZCOMPLETEDDATE IS NULL
+	AND ZCANCELEDDATE IS NULL
+	ORDER BY ZSTARTDATE DESC';
+
+$startToday = 
+	'SELECT ZTITLE,ZDUEDATE
+	FROM ZTASK
+	WHERE date(ZDUEDATE,"UNIXEPOCH","+31 YEARS")>date("now","localtime")
+	AND date(ZDUEDATE,"UNIXEPOCH","+31 YEARS")<=date("now","localtime","+3 DAYS")
+	AND ZCOMPLETEDDATE IS NULL
+	AND ZCANCELEDDATE IS NULL
+	ORDER BY ZSTARTDATE DESC';
+
+$cuales = $argv[1];
+if($cuales == 'tudei'){
+	$poo = $db->query($dueToday);
+} else {
+	$poo = $db->query($startToday);
+}
+
+
+while($i = $poo->fetchArray(SQLITE3_ASSOC)){
+	$hasResults = true;
+	$date = $cuales=='tudei'? '' : date('m/d',$i['ZDUEDATE']).' -> ';
+	$titulo = $i['ZTITLE'];
+	$tags = array();
+	preg_match_all('/\s\/(\w+)/', $titulo,$tags);
+	$tags = count($tags>0)? ' ['.preg_replace('/\s\//', '', implode('/',$tags[0])).']' : '';
+	$poop .= '» '.$date.strtoupper(preg_replace('/\s\/(\w+)/', '', $titulo)).$tags."\n";
+}
+
+if(!isset($hasResults)){
+	echo '» ACABASTE!
+   hora de echar la bien merecida hueva :)';
+	die();
+}
+
+echo $poop;
+
+
+?>
