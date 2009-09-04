@@ -1,40 +1,8 @@
 #!/usr/local/php5/bin/php
 <?php
-/*	
-	---tasks
-	[Z_ENT] => 7
-	[Z_PK] => 243 /id
-	[Z_OPT] => 2
-	[ZPRIORITY] => 0
-	[ZRECURRING] => 0
-	[ZUIDNUM] => 4834550523432160374
-	[ZPARENTLIST] => 50 /lista de folder
-	[ZPARENTTASK] => 
-	[ZSTARTDATE] => 273387600
-	[ZDISPLAYORDER] => 1250
-	[ZDUEDATE] => 273474000
-	[ZARCHIVEDDATE] => 
-	[ZCREATEDDATE] => 273455153.48869
-	[ZESTIMATEDTIME] => 0
-	[ZMODIFIEDDATE] => 273455230.82349
-	[ZACTUALTIME] => 0
-	[ZCANCELEDDATE] => 
-	[ZCOMPLETEDDATE] => 
-	[ZCALENDARSTOREUID] => 415253F5-0F69-42F2-A165-2C0B45D87F9A
-	[ZNOTES] => 
-	[ZTITLE] => Pedir docking stations y accesorios /comtelsat /dell
-	[ZATTRIBUTEDNOTES] => 
-	[ZRECURRENCERULE] =>
-	
-	
-	---
-	
-*/
 
-
-$db = new SQlite3('/Users/rob/Documents/gtd.thllibrary/library.sqlite3');
-
-//$poo = $db->query('SELECT * FROM ZTASK ORDER BY ZCREATEDDATE DESC LIMIT 10');
+// Remember to set the path to your thllibrary!
+$db = new SQlite3('/Users/yourUser/Documents/gtd.thllibrary/library.sqlite3');
 
 $dueToday = 
 	'SELECT ZTITLE, ZNOTES
@@ -72,8 +40,8 @@ while($i = $poo->fetchArray(SQLITE3_ASSOC)){
 }
 
 if(!isset($hasResults)){
-	echo '» ACABASTE!
-   hora de echar la bien merecida hueva :)';
+	echo '» All done!
+   Now go out and play :)';
 	die();
 }
 
